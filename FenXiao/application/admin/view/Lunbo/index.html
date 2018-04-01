@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>轮播列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__STATIC__/admin/style/adminStyle.css" rel="stylesheet" />
+<script src="__STATIC__/admin/js/jquery.js"></script>
+<script src="__STATIC__/admin/js/public.js"></script>
+<link href="__STATIC__/fuxuan/styles.css" rel="stylesheet" type="text/css" />
+<link href="__STATIC__/fuxuan/inserthtml.com.radios.css" rel="stylesheet" type="text/css" />
+<script src="__STATIC__/fuxuan/modernizr.js"></script>
+<script type="text/javascript" src="/public/static/layer/layer.js"></script>
+<script>
+  function lay(id){
+    layer.confirm(
+      '确认删除？', 
+      {btn: ['确定', '取消'],
+      btn1:function(index, layero){window.location.href='lunbo/del?id='+id}
+      }
+      );
+    return false;
+  }
+</script>
+</head>
+<body>
+ <div class="wrap">
+  <div class="page-title">
+    <span class="modular fl"><i></i><em>轮播列表</em></span>
+    <span class="modular fr"><a href="lunbo/add_show" class="pt-link-btn">+添加轮播</a></span>
+  </div>
+  <table class="list-style Interlaced">
+   <tr>
+    <th>轮播名字</th>
+    <th>轮播图片</th>
+    <th>轮播显示</th>
+    <th>轮播显示位置</th>
+    <th>轮播备注</th>
+    <th>操作</th>
+   </tr>
+    {volist name='$p->data' id='x'}
+      <tr class="trbgcolor">
+        <td class="center">
+          <span>
+            <em>{$x.lunbo_name}</em>
+          </span>
+        </td>
+      <td class="center">
+        <img style="width:120px;height:120px" src="__STATIC__/../uploads/{$x.lunbo_pic}">
+      </td>
+        
+
+      <td class="center">
+          <span>
+            <div class="center">
+              <input sytle="text-align:center" name="lunbo_show"  type="checkbox" {$x.lunbo_show==1 ? 'checked=1' : ''} id="checkbox-8-{$x.id*100}" />
+              <label setid={$x.id} vvv="{$x.lunbo_show==1 ? '1' : '0'}" for="checkbox-8-{$x.id*100}">
+              </label>
+            </div>   
+          </span>
+      </td>  
+
+
+      <td class="center">
+       <span>
+        <em>{$x.lunbo_num}</em>
+       </span>
+      </td>        
+      <td class="center">
+       <span>
+        <em>{$x.lunbo_remark}</em>
+       </span>
+      </td>
+      <td class="center">
+       <a href="lunbo/updata_show?id={$x.id}" title="编辑"><img src="__STATIC__/admin/images/icon_edit.gif"/></a>
+       <a title="删除" onClick="return lay({$x.id})" ><img src="__STATIC__/admin/images/icon_drop.gif"/></a>
+      </td>
+      </tr>   
+    {/volist}
+  </table>
+  <!-- BatchOperation -->
+  <div style="overflow:hidden;">
+      <!-- Operation -->
+	  <!-- turn page -->
+  
+    <div class="turnPage center fr">
+      {$p->render}  
+    </div>
+  </div>
+ </div>
+</body>
+<script>
+$(document).ready(function(){
+  $("input").on("click",function(){
+        
+
+       if($(this).next().attr("vvv")==1)
+           $(this).next().attr("vvv",0);
+      else
+          $(this).next().attr("vvv",1);
+
+        $.post("/hsn2/public/admin/lunbo/updata_index_show",{'val':$(this).next().attr('vvv'),'id':$(this).next().attr('setid')},function(result){
+              console.log(result);
+            });
+      });
+});
+</script>
+</html>
